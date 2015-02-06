@@ -1,0 +1,19 @@
+language: go
+go: 1.4
+env: "PATH=/home/travis/gopath/bin:$PATH"
+install:
+    - go get github.com/awslabs/aws-sdk-go/aws
+    - go get github.com/awslabs/aws-sdk-go/gen/ec2
+    - go get github.com/mitchellh/cli
+    - go get github.com/mitchellh/gox
+    - gox -build-toolchain -os="linux windows" -arch="386 amd64"
+script:
+  - gox -os="linux windows" -arch="386 amd64" -output "dist/{.OS}_{.Arch}_{.Dir}"
+  - zip -r ec2backup.zip dist/
+deploy:
+  provider: releases
+  api_key:
+    secure: HUVsceQGk7MBE/oNLTbcsF9Wv15Et2KSuAvl3hGfaIzR0DWXY8AiMEP15L+NkBaI1hCuexsl0/mk8D2PX4oXYeweiz9ztKEUz1iPzniVObf3s2UsdHb5l3Bw89958rrzQNoakAbTlPSIYZwY/NXgA1YwIVpAsu3/umUxMOU44ic=
+  file: ec2backup.zip
+  on:
+    repo: marcy-go/ec2backup
