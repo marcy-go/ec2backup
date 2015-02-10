@@ -8,7 +8,7 @@ install:
     - go get github.com/mitchellh/gox
     - gox -build-toolchain -os="linux windows" -arch="386 amd64"
 script:
-  - gox -os="linux windows" -arch="386 amd64" -output "dist/{.OS}_{.Arch}_{.Dir}"
+  - gox -os="linux windows" -arch="386 amd64" -output "dist/{{.OS}}_{{.Arch}}/ec2backup"
   - zip -r ec2backup.zip dist/
   - rm -rf dist
 deploy:
