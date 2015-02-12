@@ -14,17 +14,17 @@ import (
   "github.com/mitchellh/cli"
 )
 
-type Own struct{}
+type Self struct{}
 
-func (s *Own) Help() string {
+func (s *Self) Help() string {
   return "ec2backup own"
 }
 
-func (s *Own) Synopsis() string {
+func (s *Self) Synopsis() string {
   return "Backing up myself."
 }
 
-func (s *Own) Run(args []string) int {
+func (s *Self) Run(args []string) int {
   ins_id, err := getInstanceId()
   if err != nil {
     fmt.Fprintln(os.Stderr, err.Error())
@@ -296,11 +296,11 @@ func getRegion() (string, error) {
 }
 
 func main() {
-  c := cli.NewCLI("ec2backup", "0.1.0")
+  c := cli.NewCLI("ec2backup", "0.0.2")
   c.Args = os.Args[1:]
   c.Commands = map[string]cli.CommandFactory{
-    "own": func() (cli.Command, error) {
-      return &Own{}, nil
+    "self": func() (cli.Command, error) {
+      return &Self{}, nil
     },
     "all": func() (cli.Command, error) {
       return &All{}, nil
