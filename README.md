@@ -42,7 +42,7 @@ First, your instance(s) is required the tag that has the key named `Backup-Gener
 /path/to/ec2backup all
 ```
 
-# Changelog
+## Changelog
 
 See [CHANGELOG](https://github.com/marcy-go/ec2backup/blob/master/CHANGELOG.md)
 
@@ -54,6 +54,6 @@ See [CHANGELOG](https://github.com/marcy-go/ec2backup/blob/master/CHANGELOG.md)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-# License
+## License
 
 [MIT License](https://github.com/marcy-go/ec2backup/blob/master/LICENSE.txt)
