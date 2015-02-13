@@ -262,7 +262,7 @@ func filEC2Tags(ins *ec2.Instance) (string, int, error) {
     if key == "Name" {
       name = *tag.Value
     }
-    if val == "Backup-Generation" {
+    if key == "Backup-Generation" {
       gen, err = strconv.Atoi(val)
     }
   }
