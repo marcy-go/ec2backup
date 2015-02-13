@@ -3,9 +3,9 @@ APP_NAME=$(basename `pwd`)
 APP_OS="linux windows"
 APP_ARCH="386 amd64"
 
-# Go1.4.1をダウンロードする
+# Go1.4をダウンロードする
 pushd ~/
-curl -s -o go.tar.gz http://https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz
+curl -s -o go.tar.gz https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz
 tar xzf go.tar.gz
 export GOROOT=~/go
 export PATH=$GOROOT/bin:$PATH
