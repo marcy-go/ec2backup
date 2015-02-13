@@ -1,4 +1,4 @@
-# ec2backup [![Build Status](https://travis-ci.org/marcy-go/ec2backup.svg?branch=master)](https://travis-ci.org/marcy-go/ec2backup)
+# ec2backup [![Build Status](https://travis-ci.org/marcy-go/ec2backup.svg?branch=master)](https://travis-ci.org/marcy-go/ec2backup) [![Build Status](https://drone.io/github.com/marcy-go/ec2backup/status.png)](https://drone.io/github.com/marcy-go/ec2backup/latest)
 
 Amazon EC2 Backup Command.
 
