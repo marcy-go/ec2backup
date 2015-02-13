@@ -127,7 +127,7 @@ func backup(ids []string) error {
         for _, block := range blocks {
           fmt.Print("Tagging snapshot : ")
           fmt.Print(block.EBS.SnapshotID)
-          err := tagSnapshot(ec2_cli, fmt.Sprint(block.EBS.SnapshotID), img_name, fmt.Sprint(block.DeviceName), created_at, &ins)
+          err := tagSnapshot(ec2_cli, *block.EBS.SnapshotID, img_name, *block.DeviceName, created_at, &ins)
           if err != nil {
             fmt.Fprintln(os.Stderr, err.Error())
           } else {
@@ -217,7 +217,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
   var req ec2.DescribeImagesRequest
   var fil1, fil2 ec2.Filter
   fil1.Name  = aws.String("tag:InstanceID")
-  fil1.Values = []string{fmt.Sprint(ins.InstanceID)}
+  fil1.Values = []string{*ins.InstanceID}
   fil2.Name  = aws.String("tag:Backup-Type")
   fil2.Values = []string{"auto"}
   req.Filters = []ec2.Filter{fil1, fil2}
@@ -231,7 +231,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
     var sort_img SortImage
     for _, tag := range img.Tags {
       if tag.Key == aws.String("CreatedAt") {
-        sort_img.CreatedAt = fmt.Sprint(tag.Value)
+        sort_img.CreatedAt = *tag.Value
         sort_img.Image = img
         sort_imgs = append(sort_imgs, sort_img)
       }
@@ -249,7 +249,7 @@ func createImage(ec2_cli *ec2.EC2, ins *ec2.Instance, img_name string) (string, 
   req.Description         = aws.String(fmt.Sprintf("Created from %s at %s", ins.InstanceID, time.Now().Format("2006-01-02 15:04")))
   req.NoReboot            = aws.Boolean(true)
   ret, err := ec2_cli.CreateImage(&req)
-  return fmt.Sprint(ret.ImageID), err
+  return *ret.ImageID, err
 }
 
 func filEC2Tags(ins *ec2.Instance) (string, int, error) {
@@ -257,10 +257,10 @@ func filEC2Tags(ins *ec2.Instance) (string, int, error) {
   gen  := 0
   var err error
   for _, tag := range ins.Tags {
-    key := strings.Trim(" ", fmt.Sprint(tag.Key))
-    val := strings.Trim(" ", fmt.Sprint(tag.Value))
+    key := strings.Trim(" ", *tag.Key)
+    val := strings.Trim(" ", *tag.Value)
     if key == "Name" {
-      name = fmt.Sprint(tag.Value)
+      name = *tag.Value
     }
     if val == "Backup-Generation" {
       gen, err = strconv.Atoi(val)
