@@ -94,7 +94,7 @@ func backup(ids []string) error {
         }
         for _, del_img := range del_imgs {
           fmt.Print("Deleting old image : ")
-          fmt.Print(del_img.Image.ImageID)
+          fmt.Print(*del_img.Image.ImageID)
           err := deleteImage(ec2_cli, del_img.Image.ImageID)
           if err != nil {
             fmt.Fprintln(os.Stderr, err.Error())
@@ -103,7 +103,7 @@ func backup(ids []string) error {
           }
           for _, dev_map := range del_img.Image.BlockDeviceMappings {
             fmt.Print("Deleting old snapshot : ")
-            fmt.Print(dev_map.EBS.SnapshotID)
+            fmt.Print(*dev_map.EBS.SnapshotID)
             err := deleteSnapshot(ec2_cli, dev_map.EBS.SnapshotID)
             if err != nil {
               fmt.Fprintln(os.Stderr, err.Error())
@@ -230,7 +230,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
   for _, img := range res.Images {
     var sort_img SortImage
     for _, tag := range img.Tags {
-      if tag.Key == aws.String("CreatedAt") {
+      if *tag.Key == "CreatedAt" {
         sort_img.CreatedAt = *tag.Value
         sort_img.Image = img
         sort_imgs = append(sort_imgs, sort_img)
@@ -238,7 +238,8 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
     }
   }
   sort.Sort(sort_imgs)
-  return sort_imgs[gen:], nil
+  num := len(sort_imgs) - gen + 1
+  return sort_imgs[:num], nil
 }
 
 func createImage(ec2_cli *ec2.EC2, ins *ec2.Instance, img_name string) (string, error) {
@@ -296,7 +297,7 @@ func getRegion() (string, error) {
 }
 
 func main() {
-  c := cli.NewCLI("ec2backup", "0.0.2")
+  c := cli.NewCLI("ec2backup", "0.0.3")
   c.Args = os.Args[1:]
   c.Commands = map[string]cli.CommandFactory{
     "self": func() (cli.Command, error) {
