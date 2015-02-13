@@ -126,7 +126,7 @@ func backup(ids []string) error {
         }
         for _, block := range blocks {
           fmt.Print("Tagging snapshot : ")
-          fmt.Print(block.EBS.SnapshotID)
+          fmt.Print(*block.EBS.SnapshotID)
           err := tagSnapshot(ec2_cli, *block.EBS.SnapshotID, img_name, *block.DeviceName, created_at, &ins)
           if err != nil {
             fmt.Fprintln(os.Stderr, err.Error())
@@ -238,7 +238,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
     }
   }
   sort.Sort(sort_imgs)
-  return sort_imgs[:gen-1], nil
+  return sort_imgs[gen:], nil
 }
 
 func createImage(ec2_cli *ec2.EC2, ins *ec2.Instance, img_name string) (string, error) {
@@ -257,8 +257,8 @@ func filEC2Tags(ins *ec2.Instance) (string, int, error) {
   gen  := 0
   var err error
   for _, tag := range ins.Tags {
-    key := strings.Trim(" ", *tag.Key)
-    val := strings.Trim(" ", *tag.Value)
+    key := strings.Trim(*tag.Key, " ")
+    val := strings.Trim(*tag.Value, " ")
     if key == "Name" {
       name = *tag.Value
     }
