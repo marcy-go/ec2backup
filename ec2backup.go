@@ -199,7 +199,7 @@ type SortImage struct {
   Image ec2.Image
 }
 
-type SortImages []SortImage
+type SortImages *[]SortImage
 
 func (img SortImages) Len() int {
     return len(img)
@@ -222,11 +222,10 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
   fil2.Values = []string{"auto"}
   req.Filters = []ec2.Filter{fil1, fil2}
   res, err := ec2_cli.DescribeImages(&req)
-  var imgs SortImages
+  var sort_imgs SortImages
   if err != nil {
     return imgs, err
   }
-  sort_imgs := make(SortImages, gen)
   for _, img := range res.Images {
     var sort_img SortImage
     for _, tag := range img.Tags {
@@ -239,7 +238,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
   }
   sort.Sort(sort_imgs)
   num := len(sort_imgs) - gen + 1
-  return sort_imgs[:num], nil
+  return sort_imgs[:num] , nil
 }
 
 func createImage(ec2_cli *ec2.EC2, ins *ec2.Instance, img_name string) (string, error) {
@@ -247,7 +246,7 @@ func createImage(ec2_cli *ec2.EC2, ins *ec2.Instance, img_name string) (string, 
 //  req.BlockDeviceMappings = ins.BlockDeviceMappings
   req.InstanceID          = ins.InstanceID
   req.Name                = aws.String(img_name)
-  req.Description         = aws.String(fmt.Sprintf("Created from %s at %s", ins.InstanceID, time.Now().Format("2006-01-02 15:04")))
+  req.Description         = aws.String(fmt.Sprintf("Created from %s at %s", *ins.InstanceID, time.Now().Format("2006-01-02 15:04")))
   req.NoReboot            = aws.Boolean(true)
   ret, err := ec2_cli.CreateImage(&req)
   return *ret.ImageID, err
