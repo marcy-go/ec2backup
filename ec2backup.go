@@ -199,7 +199,7 @@ type SortImage struct {
   Image ec2.Image
 }
 
-type SortImages *[]SortImage
+type SortImages []SortImage
 
 func (img SortImages) Len() int {
     return len(img)
