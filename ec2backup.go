@@ -224,7 +224,7 @@ func choiceImages(ec2_cli *ec2.EC2, ins *ec2.Instance, gen int) (SortImages, err
   res, err := ec2_cli.DescribeImages(&req)
   var sort_imgs SortImages
   if err != nil {
-    return imgs, err
+    return sort_imgs, err
   }
   for _, img := range res.Images {
     var sort_img SortImage
