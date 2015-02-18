@@ -1,6 +1,6 @@
 # ec2backup [![Build Status](https://travis-ci.org/marcy-go/ec2backup.svg?branch=master)](https://travis-ci.org/marcy-go/ec2backup) [![Build Status](https://drone.io/github.com/marcy-go/ec2backup/status.png)](https://drone.io/github.com/marcy-go/ec2backup/latest)
 
-Amazon EC2 Backup Command.
+Amazon EC2 Backup Command Line Tool.
 
 This command requires the IAM Role like:
 
@@ -30,7 +30,7 @@ This command requires the IAM Role like:
 
 ## Usage
 
-First, your instance(s) is required the tag that has the key named `Backup-Generation` and the number value of generations.
+First, your instance(s) is required the tag that has the key named `Backup-Generation` with the number value of generations.
 
 ### Backup myself
 ```sh
